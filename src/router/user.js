@@ -14,25 +14,8 @@ router.get('/users',auth, userController.getAllUsers );
 
 
 
-
-router.get('/users/logout', auth, async (req, res)=>{
-
-    try{
-
-        req.user.tokens = req.user.tokens.filter((tokenObj)=>{
-            return tokenObj.token !== req.token
-        })
-
-       
-         req.user.save();
-
-        res.status(200).send({message: 'User logged out'})
-
-    }catch(e){
-        res.status(500).send({error: 'Oops an error occured'})
-    }
-
-})
+//log out user
+router.get('/users/logout', auth, userController.logout);
 
 
 //logout user from all sesssions
