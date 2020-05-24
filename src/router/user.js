@@ -2,21 +2,12 @@ const express = require('express');
 const router = new express.Router()
 const User = require('../model/User')
 const auth = require('../middleware/auth')
+const userController = require('../controllers/UserController.js')
 
-router.post('/users',async (req,res)=>{
 
-    const user = new User(req.body);
 
-    try {
 
-        await user.save()
-        const token = await user.generateUserToken();
-        res.status(201).send({user, token})
-    }catch(e) {
-        res.status(402).send(e)
-    }
- 
-})
+router.post('/users', userController.saveUser);
 
 router.get('/users',auth, async (req,res)=>{
 
