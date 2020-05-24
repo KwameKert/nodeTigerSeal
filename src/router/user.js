@@ -105,20 +105,7 @@ router.delete('/users/me',auth, async(req,res)=>{
 })
 
 
-
-router.post('/users/login', async (req, res)=> {
-    const email = req.body.email
-    const password = req.body.password
-
-    try {
-        const user = await User.findByCredentials(email, password)
-        const token = await user.generateUserToken();
-        res.status(302).send({user, token});
-
-    }catch(e) {
-     
-        res.status(400).send({error: 'User not found'})
-    }
-})
+//login user and return token and details
+router.post('/users/login', userController.loginUser);
 
 module.exports = router

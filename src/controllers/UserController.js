@@ -25,7 +25,7 @@ exports.saveUser = async (req, res)=>{
 
 }
 
-
+//get all users
 exports.getAllUsers = async (req, res)=>{
     try{
         let users = await user.find({});
@@ -37,3 +37,26 @@ exports.getAllUsers = async (req, res)=>{
 
 
 }
+
+
+
+//get user credentials 
+exports.loginUser = async (req, res)=>{
+
+    const email = req.body.email
+    const password = req.body.password
+    try {
+        const user = await User.findByCredentials(email, password)
+        const token = await user.generateUserToken();
+        responseApi(res, 200, {user, token}, "User logged in ");
+    }catch(e) {
+        res.status(400).send({error: 'User not found'})
+    }
+
+}
+
+
+
+
+
+
