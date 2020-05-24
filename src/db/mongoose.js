@@ -8,12 +8,6 @@ mongoose.connect(connectionUrl,{
     useCreateIndex: true,
     useUnifiedTopology: true,
     useFindAndModify: false
-}, (error, client) =>{{
-
-    if(error){
-        return console.log('unable to connect to database')
-    }
-
-    console.log("Connected correctly")
-}})
+}).then(() => console.log('Mongo connected ...'))
+  .catch(err=> console.error(err))  
 

@@ -1,22 +1,14 @@
-const express = require('express')
-require('./db/mongoose.js')
 
-const app = express()
+const app = require('./server')
 
 const port = process.env.PORT || 3000
 
 
 app.listen(port, ()=>{
-    console.log("Server up and running")
+    console.log(`Server is up on port ${port}`)
 })
 
 
-
-const userRouter = require('./router/user')
-
-
-app.use(express.json())
-app.use(userRouter)
 
 
 

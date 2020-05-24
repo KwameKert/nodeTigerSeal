@@ -1,6 +1,5 @@
 const express = require('express');
 const router = new express.Router()
-const User = require('../model/User')
 const auth = require('../middleware/auth')
 const userController = require('../controllers/UserController.js')
 
@@ -23,9 +22,7 @@ router.get('/users/:id',auth, userController.getUser );
 router.patch('/users/me',auth, userController.updateUser);
 
 //deleting user
-router.delete('/users/me',auth, async(req,res)=>{
- 
-})
+router.delete('/users/:id',auth, userController.deleteUser );
 
 
 //login user and return token and details
