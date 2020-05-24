@@ -4,21 +4,12 @@ const User = require('../model/User')
 const auth = require('../middleware/auth')
 const userController = require('../controllers/UserController.js')
 
-
-
-
+//save user
 router.post('/users', userController.saveUser);
 
-router.get('/users',auth, async (req,res)=>{
 
-    try{
-        const users =  await User.find({})
-        res.send(users)
-    }catch(e){
-        res.status(400).send(e)
-    }
- 
-})
+//get all users
+router.get('/users',auth, userController.getAllUsers );
 
 
 
