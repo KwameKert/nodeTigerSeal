@@ -14,19 +14,12 @@ const responseApi = (res, status, data, message)=>{
 
 //save user and return details
 exports.saveUser = async (req, res)=>{
-
     const user = new User(req.body);
-
     try {
-
         await user.save()
         const token = await user.generateUserToken();
-//        res.status(201).send({user, token})
         responseApi(res, 201, {user, token}, "User created ");
-
     }catch(e) {
-      //  res.status(400).send({error: e.message} )
-    
         responseApi(res, 400, null, e.message)
     }
 
@@ -34,18 +27,12 @@ exports.saveUser = async (req, res)=>{
 
 
 exports.getAllUsers = async (req, res)=>{
-
     try{
-
         let users = await user.find({});
-        
-        if( users.length < 1 ){
-
-            res.status(204).send({})
-        }
-
+         users.length < 1 ?  responseApi(res, 204, null, "No user founud") : 
+                             responseApi(res, 200, users, "Users found");
     }catch(e){
-        res.status(400).send({error: e.message})
+        responseApi(res, 400, null, e.message)
     }
 
 
