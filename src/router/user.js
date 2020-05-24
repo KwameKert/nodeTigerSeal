@@ -22,40 +22,11 @@ router.get('/users/logout', auth, userController.logoutUser);
 
 router.get('/users/logoutAll', auth, userController.logoutUserAll );
 
-
-router.get('/users/:id',async (req,res)=>{
-    const _id = req.params.id;
-    try {
-        const user = await User.findById(_id)
-        if(!user){
-            return res.status(404).send("User does not exist")
-        }
-        res.send(user)
-    }catch(e){
-        res.status(500).send()
-    }
-})
+//fetch user by id
+router.get('/users/:id',auth, userController.getUser );
 
 router.patch('/users/me',auth, async (req, res)=>{
 
-    const updates = Object.keys(req.body)
-    const allowedParams = ['name','email','role','password']
-    const isValid = updates.every((update)=> allowedParams.includes(update))
-
-    if(!isValid){
-        return res.status(403).send({"error": "Invalid parameters"})
-    }
-    try {
-      
-        const user = req.user
-        updates.forEach(update => user[update] = req.body[update] );
-
-        user.save()
-
-        res.send(user)
-    }catch(e){
-        res.status(500).send(e)
-    }
    
 })
 

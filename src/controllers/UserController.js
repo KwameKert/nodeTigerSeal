@@ -85,3 +85,47 @@ exports.logoutUserAll = async (req, res ) => {
     }
 
 }
+
+
+
+//get user by id 
+exports.getUser = async (req, res) => {
+
+    const _id = req.params.id;
+    try {
+        const user = await User.findById(_id)
+        if(!user){
+            responseApi(res, 400, null, "User does not exist")
+        }
+        responseApi(res, 200, null, "User found ")
+    }catch(e){
+        responseApi(res, 400, null, e.message)
+    }
+
+}
+
+
+//update user 
+exports.updateUser = async (req, res) =>{
+    //get request body keys
+    const updates = Object.keys(req.body)
+    const allowedParams = ['name','email','role','password']
+    //check body keys are valid
+    const isValid = updates.every((update)=> allowedParams.includes(update))
+
+    if(!isValid){
+        responseApi(res, 403, null, "Invalid parameters ");
+    }
+    try {
+        const user = req.user
+        //updating allowed parameters
+        updates.forEach(update => user[update] = req.body[update] );
+        await user.save()
+        responseApi(res, 200, user, "User updated successfully")
+    }catch(e){
+        responseApi(res, 400, null, e.message)
+    }
+
+}
+
+
