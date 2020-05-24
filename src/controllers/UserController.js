@@ -50,13 +50,38 @@ exports.loginUser = async (req, res)=>{
         const token = await user.generateUserToken();
         responseApi(res, 200, {user, token}, "User logged in ");
     }catch(e) {
-        res.status(400).send({error: 'User not found'})
+        responseApi(res, 400, null, e.message)
     }
 
 }
 
 
 
+//logout user from current session 
+exports.logoutUser = async (req, res) => {
+
+    try{
+        req.user.tokens = req.user.tokens.filter((tokenObj)=>{
+            return tokenObj.token !== req.token
+        })
+         await req.user.save();
+        responseApi(res, 200, null , "User logged out")
+    }catch(e){
+        responseApi(res, 400, null, e.message)
+    }
+}
 
 
 
+//logout user from all session 
+exports.logoutUserAll = async (req, res ) => {
+
+    try{
+        req.user.tokens = []
+         req.user.save()
+        responseApi(res, 200, null , "Logged out from all sessions ")
+    }catch(e){
+        responseApi(res, 400, null, e.message)
+    }
+
+}

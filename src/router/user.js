@@ -15,24 +15,12 @@ router.get('/users',auth, userController.getAllUsers );
 
 
 //log out user
-router.get('/users/logout', auth, userController.logout);
+router.get('/users/logout', auth, userController.logoutUser);
 
 
 //logout user from all sesssions
 
-router.get('/users/logoutAll', auth, async (req,res)=>{
-
-    try{
-        req.user.tokens = []
-
-         req.user.save()
-         res.status(200).send({message: 'logged out from all sessions'})
-
-    }catch(e){
-
-        res.status(417).send({error: 'Expectation failed'})
-    }
-})
+router.get('/users/logoutAll', auth, userController.logoutUserAll );
 
 
 router.get('/users/:id',async (req,res)=>{
