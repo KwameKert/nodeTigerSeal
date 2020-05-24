@@ -1,19 +1,13 @@
 'use strict'
-
 const User = require('../model/User')
 const auth = require('../middleware/auth')
 
-
-
 const responseApi = (res, status, data, message)=>{
-
     return res.status(status).send({data, message});
-
 }
 
-
 //save user and return details
-exports.saveUser = async (req, res)=>{
+const saveUser = async (req, res)=>{
     const user = new User(req.body);
     try {
         await user.save()
@@ -22,11 +16,10 @@ exports.saveUser = async (req, res)=>{
     }catch(e) {
         responseApi(res, 400, null, e.message)
     }
-
 }
 
 //get all users
-exports.getAllUsers = async (req, res)=>{
+const getAllUsers = async (req, res)=>{
     try{
         let users = await user.find({});
          users.length < 1 ?  responseApi(res, 204, null, "No user founud") : 
@@ -34,14 +27,12 @@ exports.getAllUsers = async (req, res)=>{
     }catch(e){
         responseApi(res, 400, null, e.message)
     }
-
-
 }
 
 
 
 //get user credentials 
-exports.loginUser = async (req, res)=>{
+const loginUser = async (req, res)=>{
 
     const email = req.body.email
     const password = req.body.password
@@ -58,7 +49,7 @@ exports.loginUser = async (req, res)=>{
 
 
 //logout user from current session 
-exports.logoutUser = async (req, res) => {
+const logoutUser = async (req, res) => {
 
     try{
         req.user.tokens = req.user.tokens.filter((tokenObj)=>{
@@ -74,7 +65,7 @@ exports.logoutUser = async (req, res) => {
 
 
 //logout user from all session 
-exports.logoutUserAll = async (req, res ) => {
+const logoutUserAll = async (req, res ) => {
 
     try{
         req.user.tokens = []
@@ -89,7 +80,7 @@ exports.logoutUserAll = async (req, res ) => {
 
 
 //get user by id 
-exports.getUser = async (req, res) => {
+const getUser = async (req, res) => {
 
     const _id = req.params.id;
     try {
@@ -106,7 +97,7 @@ exports.getUser = async (req, res) => {
 
 
 //update user 
-exports.updateUser = async (req, res) =>{
+const updateUser = async (req, res) =>{
     //get request body keys
     const updates = Object.keys(req.body)
     const allowedParams = ['name','email','role','password']
@@ -128,4 +119,28 @@ exports.updateUser = async (req, res) =>{
 
 }
 
+//delete user
+const deleteUser = async (req, res) => {
+    const _id = req.params.id
+    try {
+        //delete user
+        await User.findOneAndDelete({_id});
+        responseApi(res, 200, null, "User deleted successfully")
+    }catch(e){
+        responseApi(res, 400, null, e.message)
+    }
+}
 
+
+//exporting all methods 
+module.exports = {
+    deleteUser,
+    saveUser,
+    getAllUsers,
+    logoutUser,
+    logoutUserAll,
+    getUser,
+    updateUser,
+    deleteUser,
+    loginUser
+}
